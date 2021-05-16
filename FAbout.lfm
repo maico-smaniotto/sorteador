@@ -1,0 +1,82 @@
+object FormAbout: TFormAbout
+  Left = 484
+  Height = 257
+  Top = 127
+  Width = 314
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Sobre'
+  ClientHeight = 257
+  ClientWidth = 314
+  OnCreate = FormCreate
+  Position = poScreenCenter
+  LCLVersion = '2.0.10.0'
+  object ImageIcon: TImage
+    Left = 112
+    Height = 90
+    Top = 8
+    Width = 90
+    Center = True
+    Proportional = True
+    Stretch = True
+    StretchInEnabled = False
+  end
+  object LbProgramTitle: TLabel
+    Left = 72
+    Height = 28
+    Top = 108
+    Width = 168
+    Alignment = taCenter
+    AutoSize = False
+    Caption = 'Sorteador'
+    Font.Height = -19
+    Font.Style = [fsBold]
+    ParentColor = False
+    ParentFont = False
+  end
+  object BtClose: TButton
+    Left = 120
+    Height = 25
+    Top = 224
+    Width = 75
+    Cancel = True
+    Caption = 'Fechar'
+    ModalResult = 11
+    TabOrder = 0
+  end
+  object LbAutor: TLabel
+    Left = 72
+    Height = 15
+    Top = 144
+    Width = 168
+    Alignment = taCenter
+    AutoSize = False
+    Caption = 'Autor: Maico Smaniotto'
+    ParentColor = False
+  end
+  object LbMail: TLabel
+    Cursor = crHandPoint
+    Left = 8
+    Height = 15
+    Top = 168
+    Width = 296
+    Alignment = taCenter
+    AutoSize = False
+    Caption = 'maicosmaniotto@yahoo.com.br'
+    Font.Color = clBlue
+    Font.Style = [fsUnderline]
+    ParentColor = False
+    ParentFont = False
+    OnClick = LbMailClick
+  end
+  object LbCredits: TLabel
+    Left = 8
+    Height = 15
+    Top = 192
+    Width = 296
+    Alignment = taCenter
+    AutoSize = False
+    Caption = 'Ícone feito por smalllikeart de www.flaticon.com'
+    ParentColor = False
+  end
+end
