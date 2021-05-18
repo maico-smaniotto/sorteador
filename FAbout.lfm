@@ -1,12 +1,12 @@
 object FormAbout: TFormAbout
   Left = 484
-  Height = 257
+  Height = 281
   Top = 127
   Width = 314
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Sobre'
-  ClientHeight = 257
+  ClientHeight = 281
   ClientWidth = 314
   OnCreate = FormCreate
   Position = poScreenCenter
@@ -37,7 +37,7 @@ object FormAbout: TFormAbout
   object BtClose: TButton
     Left = 120
     Height = 25
-    Top = 224
+    Top = 248
     Width = 75
     Cancel = True
     Caption = 'Fechar'
@@ -69,10 +69,28 @@ object FormAbout: TFormAbout
     ParentFont = False
     OnClick = LbMailClick
   end
+  object LbVersion: TLabel
+    Cursor = crHandPoint
+    Left = 8
+    Height = 15
+    Hint = 'https://github.com/maico-smaniotto/sorteador/releases'
+    Top = 192
+    Width = 296
+    Alignment = taCenter
+    AutoSize = False
+    Caption = 'Versão: 1.0'
+    Font.Color = clBlue
+    Font.Style = [fsUnderline]
+    ParentColor = False
+    ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
+    OnClick = LbVersionClick
+  end
   object LbCredits: TLabel
     Left = 8
     Height = 15
-    Top = 192
+    Top = 216
     Width = 296
     Alignment = taCenter
     AutoSize = False

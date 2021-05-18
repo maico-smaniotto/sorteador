@@ -31,9 +31,11 @@ type
     BtClose: TButton;
     LbAutor: TLabel;
     LbMail: TLabel;
+    LbVersion: TLabel;
     LbCredits: TLabel;
     procedure LbMailClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure LbVersionClick(Sender: TObject);
   private
 
   public
@@ -57,6 +59,11 @@ end;
 procedure TFormAbout.FormCreate(Sender: TObject);
 begin
   ImageIcon.Picture.Icon.Assign(Application.Icon);
+end;
+
+procedure TFormAbout.LbVersionClick(Sender: TObject);
+begin
+  OpenURL('https://github.com/maico-smaniotto/sorteador/releases');
 end;
 
 end.
