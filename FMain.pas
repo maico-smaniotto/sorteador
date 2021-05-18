@@ -104,6 +104,7 @@ begin
 
   if LstNumbers.Count = Total then
   begin
+    LbDrawnNumber.Caption := '';
     Application.MessageBox('Todos os números foram sorteados.', 'Informação', MB_ICONINFORMATION + MB_OK);
     Exit;
   end;
@@ -119,6 +120,8 @@ begin
   try
     for I := 1 to 5 do
     begin
+      LbDrawnNumber.Font.Color := clMedGray;
+
       if LstNumbers.Count = Total then Exit;
       repeat
         RandomNumber := Random(Total) + RangeStart;
@@ -128,6 +131,7 @@ begin
       Sleep(250);
     end;
 
+    LbDrawnNumber.Font.Color := clBlue;
     LstNumbers.AddItem(LbDrawnNumber.Caption, nil);
     LstNumbers.TopIndex := LstNumbers.Count - 1;
   finally

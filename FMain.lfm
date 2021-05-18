@@ -70,6 +70,7 @@ object FormMain: TFormMain
     Alignment = taCenter
     AutoSize = False
     Caption = '0'
+    Font.Color = clBlue
     Font.Height = -19
     Font.Style = [fsBold]
     ParentColor = False
