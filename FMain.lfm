@@ -91,17 +91,17 @@ object FormMain: TFormMain
     Left = 8
     Height = 15
     Top = 48
-    Width = 95
-    Caption = 'Últimos sorteados'
+    Width = 115
+    Caption = 'Números já sorteados'
     ParentColor = False
     ParentFont = False
   end
   object BtDeleteSelected: TButton
-    Left = 176
+    Left = 128
     Height = 25
     Top = 256
-    Width = 123
-    Caption = 'Apagar selecionado'
+    Width = 171
+    Caption = 'Devolver número selecionado'
     OnClick = BtDeleteSelectedClick
     TabOrder = 4
   end

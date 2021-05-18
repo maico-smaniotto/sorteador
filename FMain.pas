@@ -22,8 +22,7 @@ unit FMain;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBGrids, StdCtrls, ExtCtrls, Buttons,
-  Windows;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, Buttons, Windows;
 
 type
   TFormMain = class(TForm)
@@ -105,7 +104,7 @@ begin
 
   if LstNumbers.Count = Total then
   begin
-    Application.MessageBox('Todos os números foram sorteados.', 'Aviso', MB_ICONINFORMATION + MB_OK);
+    Application.MessageBox('Todos os números foram sorteados.', 'Informação', MB_ICONINFORMATION + MB_OK);
     Exit;
   end;
 
@@ -176,19 +175,8 @@ begin
 end;
 
 function TFormMain.ItemExists(AItemText: String): Boolean;
-var
-  I: Integer;
 begin
-  Result := False;
-
-  for I := 0 to LstNumbers.Count - 1 do
-  begin
-    if LstNumbers.Items[I] = AItemText then
-    begin
-      Result := True;
-      Break;
-    end;
-  end;
+  Result := LstNumbers.Items.IndexOf(AItemText) >= 0;
 end;
 
 procedure TFormMain.CheckDeleteEnabled;
