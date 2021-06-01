@@ -24,7 +24,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, FMain, FAbout
+  Forms, FMain, FAbout, FConfig
   { you can add units after this };
 
 {$R *.res}

@@ -22,7 +22,8 @@ unit FMain;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, Buttons, Windows;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, Buttons, Windows,
+  fpjson;
 
 type
   TFormMain = class(TForm)
@@ -38,6 +39,7 @@ type
     BtDeleteSelected: TButton;
     BtReset: TButton;
     BtAbout: TSpeedButton;
+    BtConfig: TSpeedButton;
     procedure BtDeleteSelectedClick(Sender: TObject);
     procedure BtResetClick(Sender: TObject);
     procedure BtDrawClick(Sender: TObject);
@@ -47,9 +49,16 @@ type
     procedure LstNumbersKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure BtAboutClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure BtConfigClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
   private
+    FConfigFilePath: String;
+    FTime: Integer;
     function ItemExists(AItemText: String): Boolean;
     procedure CheckDeleteEnabled;
+    procedure LoadConfig;
+    procedure SaveConfig;
   public
 
   end;
@@ -59,7 +68,7 @@ var
 
 implementation
 
-uses FAbout;
+uses FAbout, FConfig;
 
 {$R *.lfm}
 
@@ -88,7 +97,7 @@ end;
 
 procedure TFormMain.BtDrawClick(Sender: TObject);
 var
-  I, Total, RangeStart, RangeEnd, RandomNumber: Integer;
+  I, Steps, Total, RangeStart, RangeEnd, RandomNumber: Integer;
 begin
   try
     RangeStart := Min(StrToInt(EditFrom.Text), StrToInt(EditTo.Text));
@@ -118,18 +127,25 @@ begin
   BtDraw.Enabled := False;
   BtDraw.Caption := 'Sorteando...';
   try
-    for I := 1 to 5 do
-    begin
+    Steps := FTime * 4;
+    I := 0;
+    repeat
       LbDrawnNumber.Font.Color := clMedGray;
 
       if LstNumbers.Count = Total then Exit;
       repeat
         RandomNumber := Random(Total) + RangeStart;
       until (not ItemExists(IntToStr(RandomNumber))) or (LstNumbers.Count = Total);
+
       LbDrawnNumber.Caption := IntToStr(RandomNumber);
       Application.ProcessMessages;
-      Sleep(250);
-    end;
+
+      if I < Steps then
+      begin
+        Sleep(250);
+        Inc(I);
+      end;
+    until I >= Steps;
 
     LbDrawnNumber.Font.Color := clBlue;
     LstNumbers.AddItem(LbDrawnNumber.Caption, nil);
@@ -154,6 +170,14 @@ end;
 
 procedure TFormMain.FormShow(Sender: TObject);
 begin
+  // Set config default values
+  FTime         := 1;
+  EditFrom.Text := '1';
+  EditTo.Text   := '10';
+
+  // Try to load settings from file
+  LoadConfig;
+
   Randomize;
   BtReset.Click;
   CheckDeleteEnabled;
@@ -178,6 +202,28 @@ begin
   FormAbout.Free;
 end;
 
+procedure TFormMain.FormCreate(Sender: TObject);
+begin
+  FConfigFilePath := IncludeTrailingPathDelimiter(ExtractFilePath(Application.ExeName)) + 'config.json';
+end;
+
+procedure TFormMain.BtConfigClick(Sender: TObject);
+begin
+  FormConfig := TFormConfig.Create(Self);
+  FormConfig.EdTime.Value := FTime;
+  if FormConfig.ShowModal = mrOk then
+  begin
+    FTime := FormConfig.EdTime.Value;
+    SaveConfig;
+  end;
+  FormConfig.Free;
+end;
+
+procedure TFormMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  SaveConfig;
+end;
+
 function TFormMain.ItemExists(AItemText: String): Boolean;
 begin
   Result := LstNumbers.Items.IndexOf(AItemText) >= 0;
@@ -186,6 +232,54 @@ end;
 procedure TFormMain.CheckDeleteEnabled;
 begin
   BtDeleteSelected.Enabled := LstNumbers.SelCount <> 0;
+end;
+
+procedure TFormMain.LoadConfig;
+var
+  ConfigStrs : TStrings;
+  ConfigJSON : TJSONObject;
+begin
+  if not FileExists(FConfigFilePath) then
+  begin
+    // File does not exist, save default settings and exit (at this point default values are already set)
+    SaveConfig;
+    Exit;
+  end;
+
+  ConfigStrs := TStringList.Create;
+  ConfigStrs.LoadFromFile(FConfigFilePath);
+
+  ConfigJSON := GetJSON(ConfigStrs.Text) as TJSONObject;
+
+  EditFrom.Text := ConfigJSON.FindPath('range.start').AsString;
+  EditTo.Text   := ConfigJSON.FindPath('range.end').AsString;
+  FTime         := ConfigJSON.FindPath('time').AsInteger;
+
+  ConfigStrs.Free;
+  ConfigJSON.Free;
+end;
+
+procedure TFormMain.SaveConfig;
+var
+  ConfigStrs : TStrings;
+  ConfigJSON : TJSONObject;
+  Range      : TJSONObject;
+begin
+  ConfigStrs := TStringList.Create;
+
+  ConfigJSON := TJSONObject.Create();
+  try
+    Range := TJSONObject.Create(['start', StrToIntDef(EditFrom.Text, 1), 'end', StrToIntDef(EditTo.Text, 10)]);
+    ConfigJSON.Add('range', Range);
+    ConfigJSON.Add('time', FTime);
+
+    ConfigStrs.Text := ConfigJSON.FormatJSON();
+  finally
+    ConfigJSON.Free;
+  end;
+
+  ConfigStrs.SaveToFile(FConfigFilePath);
+  ConfigStrs.Free;
 end;
 
 end.
