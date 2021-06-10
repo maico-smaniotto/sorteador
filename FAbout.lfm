@@ -78,7 +78,7 @@ object FormAbout: TFormAbout
     Width = 296
     Alignment = taCenter
     AutoSize = False
-    Caption = 'Versão: 1.0'
+    Caption = 'Versão: 1.1'
     Font.Color = clBlue
     Font.Style = [fsUnderline]
     ParentColor = False

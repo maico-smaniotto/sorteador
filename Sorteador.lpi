@@ -18,6 +18,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="1"/>
+      <MinorVersionNr Value="1"/>
       <Language Value="0416"/>
       <StringTable ProductName="Sorteador" ProductVersion="1.0"/>
     </VersionInfo>
